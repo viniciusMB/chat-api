@@ -6,6 +6,7 @@ import { ChatModule } from '@chat/chat.module';
 import { MessageRepository } from './repositories/message.repository';
 import { message } from '@message/ioc';
 import { CreateMessageUseCase } from './use-cases/create-message.usecase';
+import { ReplyMessageController } from '@message/controllers/reply-message.controller';
 
 
 @Module({
@@ -13,7 +14,7 @@ import { CreateMessageUseCase } from './use-cases/create-message.usecase';
     MongooseModule.forFeature([{ name: Message.name, schema: MessageSchema }]),
     ChatModule
   ],
-  controllers: [CreateMessageController],
+  controllers: [CreateMessageController, ReplyMessageController],
   providers: [
     MessageRepository,
     { provide: message.useCases.createMessage, useClass: CreateMessageUseCase }

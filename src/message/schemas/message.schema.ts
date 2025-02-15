@@ -14,9 +14,6 @@ export class Message {
   @Prop({ required: true })
   sender: string;
 
-  @Prop({ default: false })
-  isReply: boolean;
-
   @Prop({ required: true, type: Types.ObjectId, ref: 'Chat' })
   receiver: Types.ObjectId;
 

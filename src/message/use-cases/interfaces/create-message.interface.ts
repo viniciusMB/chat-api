@@ -6,7 +6,6 @@ export interface CreateMessageUseCaseInput {
     receiver: string;
     text: string;
     status?: string;
-    isReply?: boolean;
     reply?: string;
     type?: ChatType
     title?: string;

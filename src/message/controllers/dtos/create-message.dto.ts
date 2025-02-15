@@ -1,5 +1,5 @@
 import { ChatType } from '@chat/schemas/chat-type.enum';
-import { IsString, IsOptional, IsBoolean, IsEnum } from 'class-validator';
+import { IsString, IsOptional, IsEnum } from 'class-validator';
 
 export class CreateMessageDto {
   @IsString()
@@ -14,14 +14,6 @@ export class CreateMessageDto {
   @IsOptional()
   @IsString()
   status?: string;
-
-  @IsOptional()
-  @IsBoolean()
-  isReply?: boolean;
-
-  @IsOptional()
-  @IsString()
-  reply?: string;
 
   @IsOptional()
   @IsEnum(ChatType)
