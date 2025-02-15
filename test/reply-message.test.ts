@@ -51,7 +51,7 @@ describe('ReplyMessageController Integration', () => {
     };
 
     await request(app.getHttpServer())
-      .post('/messages')
+      .post('/messages/reply')
       .send(originalPayload)
       .expect(201)
       .expect({ message: 'Mensagem recebida' });

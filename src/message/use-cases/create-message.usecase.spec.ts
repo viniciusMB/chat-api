@@ -74,7 +74,7 @@ describe('CreateMessageUseCase', () => {
 
     await expect(createMessageUseCase.execute(input))
       .rejects
-      .toThrow("You cannot reply a message that not exist");
+      .toThrow("You cannot reply a message that does not exist");
 
     expect(messageRepository.findById).toHaveBeenCalledWith(input.reply);
   });

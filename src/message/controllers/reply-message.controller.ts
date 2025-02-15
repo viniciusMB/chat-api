@@ -12,7 +12,7 @@ export class ReplyMessageController {
   ) {}
 
   @Post('/reply')
-  createMessage(@Body() payload: ReplyMessageDto): any {
+  replyMessage(@Body() payload: ReplyMessageDto): any {
     this.logger.log(`Payload recebido: ${JSON.stringify(payload)}`);
     this.createMessageUseCase.execute(payload);
     return { message: 'Mensagem recebida' };

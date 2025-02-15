@@ -16,7 +16,7 @@ export class CreateMessageUseCase implements ICreateMessageUseCase {
     async execute(input: CreateMessageUseCaseInput) {
         if(input.reply) {
             const messageExist = await this.messageRepository.findById(input.reply)
-            if (!messageExist) throw new Error("You cannot reply a message that not exist")
+            if (!messageExist) throw new Error("You cannot reply a message that does not exist")
         }
 
         const upsertChatInput = {
