@@ -1,0 +1,36 @@
+{
+  "rootDir": ".",
+  "testEnvironment": "node",
+  "testRegex": ".*\\.spec\\.ts$",
+  "coveragePathIgnorePatterns": [
+    "tests",
+    "test",
+    "\\.module\\.ts$",
+    "interface",
+    "interfaces",
+    "enums",
+    "dtos",
+    "config",
+    "configs",
+    "src/main.ts",
+    "<rootDir>/dist/"
+  ],
+  "collectCoverageFrom": ["src/**/*.(t|j)s"],
+  "transform": {
+    "^.+\\.ts$": "ts-jest"
+  },
+  "coverageThreshold": {
+    "global": {
+      "branches": 70,
+      "functions": 70,
+      "statements": 70,
+      "lines": 70
+    }
+  },
+  "moduleNameMapper": {
+    "^@common/(.*)$": "<rootDir>/src/common/$1",
+    "^@chat/(.*)$": "<rootDir>/src/chat/$1",
+    "^@message/(.*)$": "<rootDir>/src/message/$1"
+  },"modulePathIgnorePatterns": ["<rootDir>/dist/"],
+  "setupFilesAfterEnv": ["./jest.setup.js"]
+}

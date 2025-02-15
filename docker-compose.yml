@@ -1,0 +1,26 @@
+version: '3.2'
+services:
+  mongodb:
+    image: mongo:5.0
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - ~/.docker-conf/mongodb/data/:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+
+  nestjs-app:
+    build: .
+    container_name: nestjs-app
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./:/app         # Monta o código fonte local em /app
+      - /app/node_modules  # Evita sobrescrever os node_modules instalados na imagem
+    environment:
+      MONGO_URI: "mongodb://root:example@mongodb:27017/nestjs?authSource=admin"
+    command: npm run start:dev
+    depends_on:
+      - mongodb
