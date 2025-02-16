@@ -48,7 +48,7 @@ describe('ReplyMessageController Integration', () => {
     };
 
     await request(app.getHttpServer())
-      .post('/messages/reply')
+      .post('/messages')
       .set('X-User-Id', 'user1')
       .send(originalPayload)
       .expect(201)

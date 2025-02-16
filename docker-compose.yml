@@ -11,16 +11,33 @@ services:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
 
+  localstack:
+    image: localstack/localstack
+    container_name: localstack
+    ports:
+      - "4566:4566"
+      - "4572:4572"
+    environment:
+      - SERVICES=s3
+      - DEFAULT_REGION=us-east-1
+    command: sh -c "localstack start & sleep 10 && awslocal s3 mb s3://mybucket && fg"
+
   nestjs-app:
     build: .
     container_name: nestjs-app
     ports:
       - "3000:3000"
     volumes:
-      - ./:/app         # Monta o código fonte local em /app
-      - /app/node_modules  # Evita sobrescrever os node_modules instalados na imagem
+      - ./:/app
+      - /app/node_modules 
     environment:
       MONGO_URI: "mongodb://root:example@mongodb:27017/nestjs?authSource=admin"
+      AWS_S3_ENDPOINT: "http://localstack:4566"
+      AWS_REGION: "us-east-1"
+      AWS_ACCESS_KEY_ID: "test"
+      AWS_SECRET_ACCESS_KEY: "test"
+      AWS_S3_BUCKET: "mybucket"
     command: npm run start:dev
     depends_on:
       - mongodb
+      - localstack

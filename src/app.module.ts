@@ -3,6 +3,7 @@ import { ChatModule } from '@chat/chat.module';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
+import { BucketModule } from '@common/bucket/bucket.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { MongooseModule } from '@nestjs/mongoose';
     }),
     ChatModule,
     MessageModule,
+    BucketModule
   ],
   controllers: [],
   providers: [],

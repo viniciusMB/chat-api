@@ -13,6 +13,7 @@
     "paths": {
       "@chat/*": ["src/chat/*"],
       "@message/*": ["src/message/*"],
+      "@common/*": ["src/common/*"],
     },
     "incremental": true,
     "skipLibCheck": true,

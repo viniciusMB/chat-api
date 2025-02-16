@@ -2,7 +2,7 @@ import { ChatType } from '@chat/schemas/chat-type.enum';
 import { IsString, IsOptional, IsEnum, IsMongoId } from 'class-validator';
 
 export class CreateMessageDto {
-  @IsMongoId({ message: 'Invalid ObjectId format for id' })
+  @IsMongoId({ message: 'Invalid ObjectId format for receiver' })
   receiver: string;
 
   @IsString()

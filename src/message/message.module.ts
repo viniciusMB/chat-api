@@ -11,22 +11,34 @@ import { UpdateMessageUseCase } from './use-cases/update-message.usecase';
 import { UpdateMessageController } from './controllers/update-message.controller';
 import { DeleteMessageUseCase } from './use-cases/delete-message.usecase';
 import { DeleteMessageController } from './controllers/delete-message.controller';
+import { BucketModule } from '@common/bucket/bucket.module';
+import { MessageService } from './services/message.service';
+import { ReplyMessageUseCase } from './use-cases/reply-message.usecase';
+import { CreateMessageWithFileUseCase } from './use-cases/create-message-with-file.usecase';
+import { CreateMessageWithFileController } from './controllers/create-message-with-file.controller';
 
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Message.name, schema: MessageSchema }]),
-    ChatModule
+    ChatModule,
+    BucketModule
   ],
-  controllers: [CreateMessageController, ReplyMessageController, UpdateMessageController, DeleteMessageController],
+  controllers: [CreateMessageController, CreateMessageWithFileController, ReplyMessageController, UpdateMessageController, DeleteMessageController],
   providers: [
     MessageRepository,
     { provide: message.useCases.createMessage, useClass: CreateMessageUseCase },
+    { provide: message.useCases.createMessageWithFile, useClass: CreateMessageWithFileUseCase },
+    { provide: message.useCases.replyMessage, useClass: ReplyMessageUseCase },
     { provide: message.useCases.updateMessage, useClass: UpdateMessageUseCase },
-    { provide: message.useCases.deleteMessage, useClass: DeleteMessageUseCase }
+    { provide: message.useCases.deleteMessage, useClass: DeleteMessageUseCase },
+    { provide: message.services.message, useClass: MessageService }
   ],
   exports: [
+    message.services.message,
     message.useCases.createMessage,
+    message.useCases.createMessageWithFile,
+    message.useCases.replyMessage,
     message.useCases.updateMessage,
     message.useCases.deleteMessage
   ]

@@ -20,6 +20,8 @@ RUN apk add --no-cache openssl
 
 COPY --from=builder /app /app
 
+RUN npm install --legacy-peer-deps
+
 EXPOSE 8080
 
 CMD ["node", "dist/main.js"]
