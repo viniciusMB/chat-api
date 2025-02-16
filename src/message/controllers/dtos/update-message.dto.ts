@@ -1,7 +1,7 @@
-import { IsString } from 'class-validator';
+import { IsMongoId, IsString } from 'class-validator';
 
 export class UpdateMessageDto {
-  @IsString()
+  @IsMongoId()
   id: string;
 
   @IsString()

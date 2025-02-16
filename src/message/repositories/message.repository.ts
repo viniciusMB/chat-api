@@ -37,10 +37,7 @@ export class MessageRepository {
   }
 
   private async deleteReplies(messageId: string): Promise<void> {
-    const replies = await this.messageModel.find({ reply: messageId }).exec();
-    for (const reply of replies) {
-      await this.deleteReplies(reply._id.toString());
-      await this.messageModel.findByIdAndDelete(reply._id).exec();
-    }
+    await this.messageModel.deleteMany({ reply: messageId });
+
   }
 }

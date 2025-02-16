@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
-import { MongooseModule, getConnectionToken } from '@nestjs/mongoose';
+import { getConnectionToken } from '@nestjs/mongoose';
 import * as request from 'supertest';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import { Connection } from 'mongoose';
@@ -67,16 +67,13 @@ describe('CreateMessageController Integration', () => {
 
     expect(chatMembers.length).toBe(2);
     
-    // Considera que os chatMembers possuem o mesmo campo 'chat' que é a chave do chat
     const chatKey = chatMembers[0].chat;
     expect(chatMembers[0].chat).toEqual(chatMembers[1].chat);
 
-    // Busca o chat usando o chatKey
     const chat = await connection.collection('chats').findOne({ chatKey });
     expect(chat).toBeDefined();
     expect(typeof chat.seq).toBe('number');
 
-    // Busca a mensagem criada; o campo 'receiver' da mensagem armazena o chatKey
     const message = await connection.collection('messages').findOne({
       sender: payload.sender,
       text: payload.text,
