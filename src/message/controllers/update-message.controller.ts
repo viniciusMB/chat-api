@@ -1,4 +1,4 @@
-import { Controller, Body, Logger, Inject, Put } from '@nestjs/common';
+import { Controller, Body, Logger, Inject, Put, Headers } from '@nestjs/common';
 import { message } from '@message/ioc';
 import { UpdateMessageDto } from './dtos/update-message.dto';
 import { IUpdateMessageUseCase } from '@message/use-cases/interfaces/update-message.interface';
@@ -12,9 +12,12 @@ export class UpdateMessageController {
   ) {}
 
   @Put('')
-  updateMessage(@Body() payload: UpdateMessageDto): any {
+  updateMessage(
+    @Body() payload: UpdateMessageDto,
+    @Headers('X-User-Id') user: string,
+  ): any {
     this.logger.log(`Payload recebido: ${JSON.stringify(payload)}`);
-    this.updateMessageUseCase.execute(payload);
+    this.updateMessageUseCase.execute({ ...payload, user});
     return { message: 'Mensagem recebida' };
   }
 }

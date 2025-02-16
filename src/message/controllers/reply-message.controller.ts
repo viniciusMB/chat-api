@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Logger, Inject } from '@nestjs/common';
+import { Controller, Post, Body, Logger, Inject, Headers } from '@nestjs/common';
 import { message } from '@message/ioc';
 import { ReplyMessageDto } from './dtos/reply-message.dto';
 import { ICreateMessageUseCase } from '@message/use-cases/interfaces/create-message.interface';
@@ -12,9 +12,12 @@ export class ReplyMessageController {
   ) {}
 
   @Post('/reply')
-  replyMessage(@Body() payload: ReplyMessageDto): any {
+  replyMessage(
+    @Body() payload: ReplyMessageDto,
+    @Headers('X-User-Id') user: string,
+  ): any {
     this.logger.log(`Payload recebido: ${JSON.stringify(payload)}`);
-    this.createMessageUseCase.execute(payload);
+    this.createMessageUseCase.execute({ ...payload, sender: user });
     return { message: 'Mensagem recebida' };
   }
 }

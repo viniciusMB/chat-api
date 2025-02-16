@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, HttpStatus } from '@nestjs/common';
 import { getConnectionToken } from '@nestjs/mongoose';
 import * as request from 'supertest';
 import { Connection } from 'mongoose';
@@ -14,13 +14,11 @@ describe('ReplyMessageController Integration', () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
-  
     app = moduleFixture.createNestApplication();
     await app.init();
-  
     connection = app.get(getConnectionToken());
   });
-  
+
   beforeEach(async () => {
     const collections = ['chats', 'chatmembers', 'messages'];
     for (const name of collections) {
@@ -29,21 +27,20 @@ describe('ReplyMessageController Integration', () => {
       }
     }
   });
-  
+
   afterEach(async () => {
     const collections = connection.collections;
     for (const key in collections) {
       await collections[key].deleteMany({});
     }
   });
-  
+
   afterAll(async () => {
     await app.close();
   });
-  
+
   it('POST /messages/reply - should create a reply message to an existing message', async () => {
     const originalPayload = {
-      sender: 'user1',
       receiver: 'user2',
       text: 'Original message',
       status: 'active',
@@ -52,6 +49,7 @@ describe('ReplyMessageController Integration', () => {
 
     await request(app.getHttpServer())
       .post('/messages/reply')
+      .set('X-User-Id', 'user1')
       .send(originalPayload)
       .expect(201)
       .expect({ message: 'Mensagem recebida' });
@@ -60,14 +58,13 @@ describe('ReplyMessageController Integration', () => {
 
     const chatMembers = await connection
       .collection('chatmembers')
-      .find({ user: { $in: [originalPayload.sender, originalPayload.receiver] } })
+      .find({ user: { $in: ['user1', 'user2'] } })
       .toArray();
-      
     expect(chatMembers.length).toBe(2);
     const chatKey = chatMembers[0].chat;
 
     const originalMessage = await connection.collection('messages').findOne({
-      sender: originalPayload.sender,
+      sender: 'user1',
       text: originalPayload.text,
       receiver: chatKey,
     });
@@ -75,7 +72,6 @@ describe('ReplyMessageController Integration', () => {
     expect(originalMessage.seq).toBe(1);
 
     const replyPayload = {
-      sender: 'user2',
       receiver: 'user1',
       text: 'This is a reply message',
       status: 'active',
@@ -85,6 +81,7 @@ describe('ReplyMessageController Integration', () => {
 
     await request(app.getHttpServer())
       .post('/messages/reply')
+      .set('X-User-Id', 'user2')
       .send(replyPayload)
       .expect(201)
       .expect({ message: 'Mensagem recebida' });
@@ -102,7 +99,9 @@ describe('ReplyMessageController Integration', () => {
       .toArray();
     expect(messages.length).toBe(2);
     expect(messages[0].seq).toBe(1);
+    expect(messages[0].sender).toBe('user1');
     expect(messages[1].seq).toBe(2);
+    expect(messages[1].sender).toBe('user2');
     expect(messages[1].reply.toString()).toEqual(originalMessage._id.toString());
   });
 });

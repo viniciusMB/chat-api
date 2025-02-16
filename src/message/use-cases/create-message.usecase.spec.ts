@@ -4,6 +4,7 @@ import { ICreateChatUseCase } from '@chat/use-cases/interfaces/create-chat.inter
 import { CreateMessageUseCaseInput } from './interfaces/create-message.interface';
 import { CreateMessageRepositoryInput } from '@message/repositories/message.interface';
 import { ChatType } from '@chat/schemas/chat-type.enum';
+import { NotFoundException } from '@nestjs/common';
 
 describe('CreateMessageUseCase', () => {
   let createMessageUseCase: CreateMessageUseCase;
@@ -34,7 +35,6 @@ describe('CreateMessageUseCase', () => {
     };
 
     const chatDocument = { chatKey: 'chatKeyValue', seq: 5 };
-
     (upsertChatUseCase.execute as jest.Mock).mockResolvedValue(chatDocument);
 
     const expectedRepoInput: CreateMessageRepositoryInput = {
@@ -60,7 +60,7 @@ describe('CreateMessageUseCase', () => {
     expect(result).toEqual(createdMessage);
   });
 
-  it('should throw an error if replying to a non-existent message', async () => {
+  it('should throw a NotFoundException if replying to a non-existent message', async () => {
     const input: CreateMessageUseCaseInput = {
       sender: 'user1',
       receiver: 'user2',
@@ -74,7 +74,7 @@ describe('CreateMessageUseCase', () => {
 
     await expect(createMessageUseCase.execute(input))
       .rejects
-      .toThrow("You cannot reply a message that does not exist");
+      .toThrow(new NotFoundException("Message not found!"));
 
     expect(messageRepository.findById).toHaveBeenCalledWith(input.reply);
   });
@@ -89,7 +89,7 @@ describe('CreateMessageUseCase', () => {
       reply: 'existingMessageId',
     };
 
-    const existingMessage = { _id: 'existingMessageId', text: 'Existing message' };
+    const existingMessage = { _id: 'existingMessageId', text: 'Existing message', sender: 'user1' };
     (messageRepository.findById as jest.Mock).mockResolvedValue(existingMessage);
 
     const chatDocument = { chatKey: 'chatKeyValue', seq: 10 };

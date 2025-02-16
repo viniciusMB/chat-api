@@ -39,4 +39,8 @@ export class ChatMemberRepository {
   async findByUserId(userId: string): Promise<ChatMember[]> {
     return this.chatMemberModel.find({ user: userId }).exec();
   }
+
+  async findByUserAndChat(userId: string, chatId: string): Promise<ChatMember> {
+    return this.chatMemberModel.findOne({ user: userId, chat: chatId }).exec();
+  }
 }

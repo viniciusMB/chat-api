@@ -1,7 +1,7 @@
 import { chat } from "@chat/ioc";
 import { ICreateChatUseCase } from "@chat/use-cases/interfaces/create-chat.interface";
 import { MessageRepository } from "@message/repositories/message.repository";
-import { Inject, Injectable } from "@nestjs/common";
+import { Inject, Injectable, NotFoundException } from "@nestjs/common";
 import { CreateMessageUseCaseInput, ICreateMessageUseCase } from "./interfaces/create-message.interface";
 import { CreateMessageRepositoryInput } from "@message/repositories/message.interface";
 
@@ -14,22 +14,19 @@ export class CreateMessageUseCase implements ICreateMessageUseCase {
     ) {}
 
     async execute(input: CreateMessageUseCaseInput) {
-        if(input.reply) {
-            const messageExist = await this.messageRepository.findById(input.reply)
-            if (!messageExist) throw new Error("You cannot reply a message that does not exist")
+        const { sender, receiver, type, status, reply, text } = input
+        if(reply) {
+            const messageExist = await this.messageRepository.findById(reply)
+            if (!messageExist) throw new NotFoundException("Message not found!")
         }
 
-        const upsertChatInput = {
-            sender: input.sender,
-            receiver: input.receiver,
-            type: input.type,
-        }
+        const upsertChatInput = { sender, receiver, type }
         const chatDocument = await this.upsertChatUseCase.execute(upsertChatInput)
         const createMessageRepositoryInput: CreateMessageRepositoryInput = {
-            sender: input.sender,
-            text: input.text,
-            status: input.status,
-            reply: input.reply,
+            sender,
+            text,
+            status,
+            reply,
             receiver: chatDocument.chatKey,
             seq: chatDocument.seq
         }

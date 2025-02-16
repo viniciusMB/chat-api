@@ -1,5 +1,5 @@
 import { MessageRepository } from "@message/repositories/message.repository";
-import { Injectable } from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
 import { IUpdateMessageUseCase, UpdateMessageUseCaseInput } from "./interfaces/update-message.interface";
 
 @Injectable()
@@ -9,9 +9,9 @@ export class UpdateMessageUseCase implements IUpdateMessageUseCase {
     ) {}
 
     async execute(input: UpdateMessageUseCaseInput) {
-        const { id: messageId, text } = input
+        const { id: messageId, text, user } = input
         const messageExist = await this.messageRepository.findById(messageId)
-        if (!messageExist) throw new Error("You cannot edit a message that does not exist")
+        if (!messageExist || messageExist.sender !== user) throw new NotFoundException("Message not found!")
 
 
         return this.messageRepository.update(messageId, { text })
