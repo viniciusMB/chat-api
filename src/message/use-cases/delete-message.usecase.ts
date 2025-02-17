@@ -1,11 +1,13 @@
-import { MessageRepository } from "@message/repositories/message.repository";
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Inject, Injectable, NotFoundException } from "@nestjs/common";
 import { IDeleteMessageUseCase, DeleteMessageUseCaseInput } from "./interfaces/delete-message.interface";
+import { message } from "@message/ioc";
+import { IMessageRepository } from "@message/repositories/message.interface";
 
 @Injectable()
 export class DeleteMessageUseCase implements IDeleteMessageUseCase {
     constructor(
-        private readonly messageRepository: MessageRepository,
+        @Inject(message.repositories.message)
+        private readonly messageRepository: IMessageRepository,
     ) {}
 
     async execute(input: DeleteMessageUseCaseInput) {

@@ -3,9 +3,10 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { ChatMember, ChatMemberDocument } from '@chat/schemas/chat-member.schema';
 import { CreateChatMemberUseCaseInput } from '@chat/use-cases/interfaces/create-chat-member.interface';
+import { IChatMemberRepository } from './chat-member.interface';
 
 @Injectable()
-export class ChatMemberRepository {
+export class ChatMemberRepository implements IChatMemberRepository{
   constructor(
     @InjectModel(ChatMember.name)
     private readonly chatMemberModel: Model<ChatMemberDocument>,

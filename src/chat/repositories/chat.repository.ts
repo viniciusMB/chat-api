@@ -2,9 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Chat, ChatDocument } from '@chat/schemas/chat.schema';
+import { IChatRepository } from './chat.interface';
 
 @Injectable()
-export class ChatRepository {
+export class ChatRepository implements IChatRepository {
   constructor(
     @InjectModel(Chat.name)
     private readonly chatModel: Model<ChatDocument>,

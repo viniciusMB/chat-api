@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Message, MessageDocument } from '@message/schemas/message.schema';
-import { CreateMessageRepositoryInput } from '@message/repositories/message.interface';
+import { CreateMessageRepositoryInput, IMessageRepository } from '@message/repositories/message.interface';
 @Injectable()
-export class MessageRepository {
+export class MessageRepository implements IMessageRepository {
   constructor(
     @InjectModel(Message.name)
     private readonly messageModel: Model<MessageDocument>,

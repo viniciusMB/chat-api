@@ -1,11 +1,13 @@
-import { MessageRepository } from "@message/repositories/message.repository";
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Inject, Injectable, NotFoundException } from "@nestjs/common";
 import { IUpdateMessageUseCase, UpdateMessageUseCaseInput } from "./interfaces/update-message.interface";
+import { message } from "@message/ioc";
+import { IMessageRepository } from "@message/repositories/message.interface";
 
 @Injectable()
 export class UpdateMessageUseCase implements IUpdateMessageUseCase {
     constructor(
-        private readonly messageRepository: MessageRepository,
+        @Inject(message.repositories.message)
+        private readonly messageRepository: IMessageRepository,
     ) {}
 
     async execute(input: UpdateMessageUseCaseInput) {

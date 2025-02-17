@@ -42,7 +42,7 @@ import { ReplyMessageListener } from './listeners/reply-message.listener';
     ReplyMessageListener,
   ],
   providers: [
-    MessageRepository,
+    { provide: message.repositories.message, useClass: MessageRepository },
     { provide: message.useCases.createMessage, useClass: CreateMessageUseCase },
     { provide: message.useCases.createMessageWithFile, useClass: CreateMessageWithFileUseCase },
     { provide: message.useCases.replyMessage, useClass: ReplyMessageUseCase },
@@ -51,6 +51,7 @@ import { ReplyMessageListener } from './listeners/reply-message.listener';
     { provide: message.services.message, useClass: MessageService }
   ],
   exports: [
+    message.repositories.message,
     message.services.message,
     message.useCases.createMessage,
     message.useCases.createMessageWithFile,

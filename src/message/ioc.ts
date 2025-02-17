@@ -8,5 +8,8 @@ export const message = {
     },
     services: {
         message: Symbol.for("MessageService")
+    },
+    repositories: {
+        message: Symbol.for("MessageRepository")
     }
 }

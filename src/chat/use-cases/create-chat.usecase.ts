@@ -1,15 +1,16 @@
-import { ChatRepository } from "@chat/repositories/chat.repository";
 import { ChatType } from "@chat/schemas/chat-type.enum";
 import { IChatKeyService } from "@chat/services/chat-key.inteface";
 import { chat } from "@chat/ioc";
 import { Inject, Injectable } from "@nestjs/common";
 import { CreateChatUseCaseInput, ICreateChatUseCase } from "./interfaces/create-chat.interface";
 import { ICreateChatMemberUseCase } from "./interfaces/create-chat-member.interface";
+import { IChatRepository } from "@chat/repositories/chat.interface";
 
 @Injectable()
 export class CreateChatUseCase implements ICreateChatUseCase {
   constructor(
-    private readonly chatRepository: ChatRepository,
+    @Inject(chat.repositories.chat)
+    private readonly chatRepository: IChatRepository,
     @Inject(chat.services.chatKey)
     private readonly chatKeyService: IChatKeyService,
     @Inject(chat.useCases.createChatMember)

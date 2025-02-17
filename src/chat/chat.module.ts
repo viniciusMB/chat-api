@@ -18,10 +18,15 @@ import { ChatMemberRepository } from './repositories/chat-member.repository';
     { provide: chat.services.chatKey, useClass: ChatKeyService },
     { provide: chat.useCases.createChat, useClass: CreateChatUseCase },
     { provide: chat.useCases.createChatMember, useClass: CreateChatMemberUseCase },
-    ChatRepository,
-    ChatMemberRepository,
+    { provide: chat.repositories.chat, useClass: ChatRepository},
+    { provide: chat.repositories.chatMember, useClass: ChatMemberRepository},
 
   ],
-  exports: [chat.services.chatKey, chat.useCases.createChat, chat.useCases.createChatMember, ChatRepository, ChatMemberRepository]
+  exports: [
+    chat.services.chatKey, 
+    chat.useCases.createChat, 
+    chat.useCases.createChatMember, 
+    chat.repositories.chat, 
+    chat.repositories.chatMember]
 })
 export class ChatModule {}
