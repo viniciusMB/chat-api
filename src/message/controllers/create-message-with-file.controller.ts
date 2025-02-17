@@ -12,7 +12,6 @@ import {
   import { FileInterceptor } from '@nestjs/platform-express';
   import { CreateMessageWithFileDto } from './dtos/create-message-with-file.dto';
   import { ClientProxy } from '@nestjs/microservices';
-  import { message } from '@message/ioc';
   
   @Controller('messages')
   export class CreateMessageWithFileController {

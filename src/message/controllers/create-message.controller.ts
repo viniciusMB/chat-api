@@ -20,6 +20,6 @@ export class CreateMessageController {
 
     this.client.emit('create_message', messageData);
 
-    return { message: 'Message received' };
+    return { message: 'Mensagem recebida' };
   }
 }
