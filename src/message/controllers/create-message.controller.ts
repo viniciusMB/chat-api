@@ -16,10 +16,10 @@ export class CreateMessageController {
     @Headers('X-User-Id') user: string,
   ): Promise<any> {
     const messageData = { ...payload, sender: user };
-    this.logger.log(`Enviando mensagem para a fila: ${JSON.stringify(messageData)}`);
+    this.logger.log(`Sending message to queue: ${JSON.stringify(messageData)}`);
 
     this.client.emit('create_message', messageData);
 
-    return { message: 'Mensagem recebida' };
+    return { message: 'Message received' };
   }
 }

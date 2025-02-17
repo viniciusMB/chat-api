@@ -26,7 +26,7 @@ export class CreateMessageWithFileListener {
       await this.createMessageWithFileUseCase.execute(data);
       channel.ack(originalMessage)
     } catch (error) {
-      this.logger.error(`Error processing message: ${error.message}`, error.stack);
+      this.logger.error(error.message);
       channel.nack(originalMessage, false, false);
     }
   }

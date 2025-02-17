@@ -70,7 +70,7 @@ describe('DeleteMessageController Integration', () => {
       .delete(`/messages/${messageId}`)
       .set('X-User-Id', user)
       .expect(HttpStatus.OK)
-      .expect({ message: 'Mensagem recebida' });
+      .expect({ message: 'Message received' });
 
     await new Promise((resolve) => setTimeout(resolve, 100));
 
@@ -89,8 +89,7 @@ describe('DeleteMessageController Integration', () => {
       await new Promise((resolve) => setTimeout(resolve, 100));
     
       expect(loggerErrorSpy).toHaveBeenCalledWith(
-        expect.stringContaining('Message not found!'),
-        expect.any(String)
+        expect.stringContaining('Message not found!')
       );
   });
 

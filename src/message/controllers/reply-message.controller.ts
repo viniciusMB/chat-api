@@ -17,8 +17,8 @@ export class ReplyMessageController {
     @Headers('X-User-Id') user: string,
   ): any {
     const messageData = { ...payload, sender: user };
-    this.logger.log(`Payload recebido: ${JSON.stringify(messageData)}`);
+    this.logger.log(`Request Data: ${JSON.stringify(messageData)}`);
     this.client.emit('reply_message', messageData);
-    return { message: 'Mensagem recebida' };
+    return { message: 'Message received' };
   }
 }

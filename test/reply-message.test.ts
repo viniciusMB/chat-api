@@ -66,7 +66,7 @@ describe('ReplyMessageController Integration', () => {
       .set('X-User-Id', 'user1')
       .send(originalPayload)
       .expect(201)
-      .expect({ message: 'Mensagem recebida' });
+      .expect({ message: 'Message received' });
 
     await new Promise((resolve) => setTimeout(resolve, 100));
 
@@ -98,7 +98,7 @@ describe('ReplyMessageController Integration', () => {
       .set('X-User-Id', 'user2')
       .send(replyPayload)
       .expect(201)
-      .expect({ message: 'Mensagem recebida' });
+      .expect({ message: 'Message received' });
 
     await new Promise((resolve) => setTimeout(resolve, 100));
 

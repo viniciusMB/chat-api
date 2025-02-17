@@ -46,7 +46,7 @@ import {
         file: { originalname: file.originalname, mimetype: file.mimetype },
       })}`);
       this.client.emit('create_message_with_file', messageData);
-      return { message: 'Mensagem recebida' };
+      return { message: 'Message received' };
     }
   }
   

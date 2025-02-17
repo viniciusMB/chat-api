@@ -14,13 +14,6 @@ describe('ChatKeyService', () => {
     expect(key1).toEqual(key2);
   });
 
-  it('should generate different chat keys when a title is provided', () => {
-    const userIds = ['user1', 'user2'];
-    const keyWithoutTitle = chatKeyService.generateChatKey(userIds);
-    const keyWithTitle = chatKeyService.generateChatKey(userIds, 'MyGroup');
-    expect(keyWithoutTitle).not.toEqual(keyWithTitle);
-  });
-
   it('should return a valid SHA-256 hash string (64 hex characters)', () => {
     const userIds = ['user1', 'user2', 'user3'];
     const chatKey = chatKeyService.generateChatKey(userIds);

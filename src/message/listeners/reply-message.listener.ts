@@ -23,10 +23,7 @@ export class ReplyMessageListener {
       await this.replyMessageUseCase.execute(data);
       channel.ack(originalMessage);
     } catch (error) {
-      this.logger.error(
-        `Erro ao processar resposta de mensagem: ${error.message}`,
-        error.stack,
-      );
+      this.logger.error(error.message);
       channel.nack(originalMessage, false, false);
     }
   }

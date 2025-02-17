@@ -36,14 +36,14 @@ export class BucketRepository implements IBucketRepository {
   private async ensureBucketExists(): Promise<void> {
     try {
       await this.s3Client.send(new HeadBucketCommand({ Bucket: this.bucket }));
-      this.logger.log(`Bucket "${this.bucket}" já existe.`);
+      this.logger.log(`Bucket "${this.bucket}" already exists.`);
     } catch (error) {
       if (error.name === 'NotFound' || error.name === 'NoSuchBucket') {
-        this.logger.warn(`Bucket "${this.bucket}" não encontrado. Criando...`);
+        this.logger.warn(`Bucket "${this.bucket}" Not found. Creating Bucket...`);
         await this.s3Client.send(new CreateBucketCommand({ Bucket: this.bucket }));
-        this.logger.log(`Bucket "${this.bucket}" criado com sucesso.`);
+        this.logger.log(`Bucket "${this.bucket}" created.`);
       } else {
-        this.logger.error(`Erro ao verificar o bucket: ${error.message}`);
+        this.logger.error(`Bucket validation error: ${error.message}`);
         throw error;
       }
     }

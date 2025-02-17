@@ -5,7 +5,6 @@ import * as request from 'supertest';
 import { Connection } from 'mongoose';
 import { ChatType } from '@chat/schemas/chat-type.enum';
 import { AppModule } from '../src/app.module';
-import { Transport } from '@nestjs/microservices';
 import { ConfigService } from '@nestjs/config';
 import { createRabbitMQOptions } from '@common/rabbitmq/rabbitmq.config';
 
@@ -65,7 +64,7 @@ describe('CreateMessageController Integration', () => {
       .set('X-User-Id', 'user1')
       .send(payload)
       .expect(201)
-      .expect({ message: 'Mensagem recebida' });
+      .expect({ message: 'Message received' });
 
     await new Promise((resolve) => setTimeout(resolve, 100));
 
@@ -115,21 +114,21 @@ describe('CreateMessageController Integration', () => {
       .set('X-User-Id', 'user1')
       .send(payload1)
       .expect(201)
-      .expect({ message: 'Mensagem recebida' });
+      .expect({ message: 'Message received' });
 
     await request(app.getHttpServer())
       .post('/messages')
       .set('X-User-Id', 'user2')
       .send(payload2)
       .expect(201)
-      .expect({ message: 'Mensagem recebida' });
+      .expect({ message: 'Message received' });
 
     await request(app.getHttpServer())
       .post('/messages')
       .set('X-User-Id', 'user1')
       .send(payload3)
       .expect(201)
-      .expect({ message: 'Mensagem recebida' });
+      .expect({ message: 'Message received' });
 
     await new Promise((resolve) => setTimeout(resolve, 100));
 

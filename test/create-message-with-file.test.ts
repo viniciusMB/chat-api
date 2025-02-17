@@ -85,7 +85,7 @@ describe('CreateMessageWithFileController Integration', () => {
       .field('title', payload.title)
       .attach('file', filePath)
       .expect(HttpStatus.CREATED)
-      .expect({ message: 'Mensagem recebida' });
+      .expect({ message: 'Message received' });
 
     fs.unlinkSync(filePath);
 
@@ -149,7 +149,7 @@ describe('CreateMessageWithFileController Integration', () => {
       .field('title', payload1.title)
       .attach('file', file1Path)
       .expect(HttpStatus.CREATED)
-      .expect({ message: 'Mensagem recebida' });
+      .expect({ message: 'Message received' });
 
     await request(app.getHttpServer())
       .post('/messages/with-file')
@@ -160,7 +160,7 @@ describe('CreateMessageWithFileController Integration', () => {
       .field('type', payload2.type)
       .attach('file', file2Path)
       .expect(HttpStatus.CREATED)
-      .expect({ message: 'Mensagem recebida' });
+      .expect({ message: 'Message received' });
 
     await request(app.getHttpServer())
       .post('/messages/with-file')
@@ -171,7 +171,7 @@ describe('CreateMessageWithFileController Integration', () => {
       .field('type', payload3.type)
       .attach('file', file3Path)
       .expect(HttpStatus.CREATED)
-      .expect({ message: 'Mensagem recebida' });
+      .expect({ message: 'Message received' });
 
     fs.unlinkSync(file1Path);
     fs.unlinkSync(file2Path);

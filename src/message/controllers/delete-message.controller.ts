@@ -23,10 +23,10 @@ export class DeleteMessageController {
       throw new BadRequestException(errors);
     }
 
-    this.logger.log(`Payload received: ${JSON.stringify(dto)}`);
+    this.logger.log(`Request Data: ${JSON.stringify(dto)}`);
 
     this.client.emit('delete_message', dto);
 
-    return { message: 'Mensagem recebida' };
+    return { message: 'Message received' };
   }
 }

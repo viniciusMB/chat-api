@@ -24,10 +24,7 @@ export class UpdateMessageListener {
       await this.updateMessageUseCase.execute(data);
       channel.ack(originalMessage);
     } catch (error) {
-      this.logger.error(
-        `Erro ao processar atualização de mensagem: ${error.message}`,
-        error.stack,
-      );
+      this.logger.error(error.message);
       channel.nack(originalMessage, false, false);
     }
   }

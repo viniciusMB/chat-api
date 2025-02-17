@@ -23,10 +23,7 @@ export class DeleteMessageListener {
       await this.deleteMessageUseCase.execute(data);
       channel.ack(originalMessage)
     } catch (error) {
-      this.logger.error(
-        `Erro ao processar deleção de mensagem: ${error.message}`,
-        error.stack,
-      );
+      this.logger.error(error.message);
       channel.nack(originalMessage, false, false);
     }
   }

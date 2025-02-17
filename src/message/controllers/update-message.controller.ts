@@ -17,8 +17,8 @@ export class UpdateMessageController {
     @Headers('X-User-Id') user: string,
   ): any {
     const messageData = { ...payload, user };
-    this.logger.log(`Payload recebido: ${JSON.stringify(messageData)}`);
+    this.logger.log(`Request Data: ${JSON.stringify(messageData)}`);
     this.client.emit('update_message', messageData);
-    return { message: 'Mensagem recebida' };
+    return { message: 'Message received' };
   }
 }
