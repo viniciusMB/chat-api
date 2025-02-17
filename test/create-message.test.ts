@@ -5,6 +5,9 @@ import * as request from 'supertest';
 import { Connection } from 'mongoose';
 import { ChatType } from '@chat/schemas/chat-type.enum';
 import { AppModule } from '../src/app.module';
+import { Transport } from '@nestjs/microservices';
+import { ConfigService } from '@nestjs/config';
+import { createRabbitMQOptions } from '@common/rabbitmq/rabbitmq.config';
 
 describe('CreateMessageController Integration', () => {
   let app: INestApplication;
@@ -12,9 +15,19 @@ describe('CreateMessageController Integration', () => {
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [ AppModule ],
+      imports: [AppModule],
     }).compile();
     app = moduleFixture.createNestApplication();
+
+    const configService = app.get(ConfigService);
+    
+    const microserviceOptions = createRabbitMQOptions(configService);
+
+    microserviceOptions.forEach((options) => {
+      app.connectMicroservice(options);
+    });
+    await app.startAllMicroservices();
+    
     await app.init();
     connection = app.get(getConnectionToken());
   });

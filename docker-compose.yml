@@ -10,6 +10,16 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
+  
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: password
 
   localstack:
     image: localstack/localstack
@@ -37,7 +47,19 @@ services:
       AWS_ACCESS_KEY_ID: "test"
       AWS_SECRET_ACCESS_KEY: "test"
       AWS_S3_BUCKET: "mybucket"
+      RABBITMQ_URL: "amqp://user:password@rabbitmq:5672"
+      CREATE_MESSAGE_QUEUE_NAME: "create_message_queue"
+      CREATE_MESSAGE_QUEUE_DLQ_NAME: "create_message_queue_dlq"
+      REPLY_MESSAGE_QUEUE_NAME: "reply_message_queue"
+      REPLY_MESSAGE_QUEUE_DLQ_NAME: "reply_message_queue_dlq"
+      DELETE_MESSAGE_QUEUE_NAME: "delete_message_queue"
+      DELETE_MESSAGE_QUEUE_DLQ_NAME: "delete_message_queue_dlq"
+      UPDATE_MESSAGE_QUEUE_NAME: "update_message_queue"
+      UPDATE_MESSAGE_QUEUE_DLQ_NAME: "update_message_queue_dlq"
+      CREATE_MESSAGE_WITH_FILE_QUEUE_NAME: "file_upload_queue"
+      CREATE_MESSAGE_WITH_FILE_QUEUE_DLQ_NAME: "file_upload_queue_dlq"
     command: npm run start:dev
     depends_on:
       - mongodb
       - localstack
+      - rabbitmq

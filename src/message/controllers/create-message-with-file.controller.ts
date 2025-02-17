@@ -11,16 +11,16 @@ import {
   } from '@nestjs/common';
   import { FileInterceptor } from '@nestjs/platform-express';
   import { CreateMessageWithFileDto } from './dtos/create-message-with-file.dto';
+  import { ClientProxy } from '@nestjs/microservices';
   import { message } from '@message/ioc';
-import { ICreateMessageWithFileUseCase } from '@message/use-cases/interfaces/create-message-with-file.interface';
   
   @Controller('messages')
   export class CreateMessageWithFileController {
     private readonly logger = new Logger(CreateMessageWithFileController.name);
   
     constructor(
-      @Inject(message.useCases.createMessageWithFile)
-      private readonly createMessageWithFileUseCase: ICreateMessageWithFileUseCase,
+      @Inject('CREATE_MESSAGE_WITH_FILE_QUEUE')
+      private readonly client: ClientProxy,
     ) {}
   
     @Post('with-file')
@@ -33,10 +33,19 @@ import { ICreateMessageWithFileUseCase } from '@message/use-cases/interfaces/cre
       if (!file) {
         throw new BadRequestException('File is required');
       }
-
-      this.logger.log(`File uploaded: ${JSON.stringify(file.originalname)}`);
-
-      await this.createMessageWithFileUseCase.execute({ ...payload, sender: user, file });
+      const encodedFile = {
+        buffer: file.buffer.toString('base64'),
+        originalname: file.originalname,
+        mimetype: file.mimetype,
+      };
+      const messageData = { ...payload, sender: user, file: encodedFile };
+  
+      this.logger.log(`Sending file message to queue: ${JSON.stringify({
+        ...payload,
+        sender: user,
+        file: { originalname: file.originalname, mimetype: file.mimetype },
+      })}`);
+      this.client.emit('create_message_with_file', messageData);
       return { message: 'Mensagem recebida' };
     }
   }

@@ -1,16 +1,15 @@
-import { Controller, Logger, Inject, Delete, Param, Headers, BadRequestException } from '@nestjs/common';
+import { Controller, Delete, Param, Headers, BadRequestException, Logger, Inject } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
 import { DeleteMessageDto } from './dtos/delete-message.dto';
-import { message } from '@message/ioc';
-import { IDeleteMessageUseCase } from '@message/use-cases/interfaces/delete-message.interface';
+import { ClientProxy } from '@nestjs/microservices';
 
 @Controller('messages')
 export class DeleteMessageController {
   private readonly logger = new Logger(DeleteMessageController.name);
+
   constructor(
-    @Inject(message.useCases.deleteMessage)
-    private readonly deleteMessageUseCase: IDeleteMessageUseCase,
+    @Inject('DELETE_MESSAGE_QUEUE') private readonly client: ClientProxy,
   ) {}
 
   @Delete(':id')
@@ -23,8 +22,11 @@ export class DeleteMessageController {
     if (errors.length > 0) {
       throw new BadRequestException(errors);
     }
-    this.logger.log(`Payload recebido: ${JSON.stringify(dto)}`);
-    await this.deleteMessageUseCase.execute(dto);
+
+    this.logger.log(`Payload received: ${JSON.stringify(dto)}`);
+
+    this.client.emit('delete_message', dto);
+
     return { message: 'Mensagem recebida' };
   }
 }

@@ -9,6 +9,8 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { bucket } from '@common/bucket/ioc';
 import { IBucketRepository } from '@common/bucket/bucket.interface';
+import { ConfigService } from '@nestjs/config';
+import { createRabbitMQOptions } from '@common/rabbitmq/rabbitmq.config';
 
 describe('CreateMessageWithFileController Integration', () => {
   let app: INestApplication;
@@ -21,6 +23,16 @@ describe('CreateMessageWithFileController Integration', () => {
       imports: [AppModule],
     }).compile();
     app = moduleFixture.createNestApplication();
+
+    const configService = app.get(ConfigService);
+    
+    const microserviceOptions = createRabbitMQOptions(configService);
+
+    microserviceOptions.forEach((options) => {
+      app.connectMicroservice(options);
+    });
+    await app.startAllMicroservices();
+    
     await app.init();
     connection = app.get(getConnectionToken());
     if (!fs.existsSync(fixturesDir)) {

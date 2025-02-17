@@ -16,6 +16,11 @@ import { MessageService } from './services/message.service';
 import { ReplyMessageUseCase } from './use-cases/reply-message.usecase';
 import { CreateMessageWithFileUseCase } from './use-cases/create-message-with-file.usecase';
 import { CreateMessageWithFileController } from './controllers/create-message-with-file.controller';
+import { CreateMessageListener } from './listeners/create-message.listener';
+import { DeleteMessageListener } from './listeners/delete-message.listener';
+import { CreateMessageWithFileListener } from './listeners/create-message-with-file.listener';
+import { UpdateMessageListener } from './listeners/update-message.listener';
+import { ReplyMessageListener } from './listeners/reply-message.listener';
 
 
 @Module({
@@ -24,7 +29,18 @@ import { CreateMessageWithFileController } from './controllers/create-message-wi
     ChatModule,
     BucketModule
   ],
-  controllers: [CreateMessageController, CreateMessageWithFileController, ReplyMessageController, UpdateMessageController, DeleteMessageController],
+  controllers: [
+    CreateMessageController, 
+    CreateMessageWithFileController, 
+    ReplyMessageController, 
+    UpdateMessageController, 
+    DeleteMessageController,
+    CreateMessageWithFileListener,
+    CreateMessageListener,
+    DeleteMessageListener,
+    UpdateMessageListener,
+    ReplyMessageListener,
+  ],
   providers: [
     MessageRepository,
     { provide: message.useCases.createMessage, useClass: CreateMessageUseCase },
@@ -40,7 +56,7 @@ import { CreateMessageWithFileController } from './controllers/create-message-wi
     message.useCases.createMessageWithFile,
     message.useCases.replyMessage,
     message.useCases.updateMessage,
-    message.useCases.deleteMessage
+    message.useCases.deleteMessage,
   ]
 })
 export class MessageModule {}

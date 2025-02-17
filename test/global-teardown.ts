@@ -7,4 +7,9 @@ module.exports = async () => {
   if (localstackContainer) {
     await localstackContainer.stop();
   }
+
+  const rabbitMQContainer = global.__RABBITMQ_CONTAINER__;
+  if(rabbitMQContainer) {
+    await rabbitMQContainer.stop()
+  }
 };

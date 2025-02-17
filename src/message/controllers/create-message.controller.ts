@@ -1,23 +1,25 @@
-import { ICreateMessageUseCase } from '@message/use-cases/interfaces/create-message.interface';
 import { Controller, Post, Body, Logger, Inject, Headers } from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
 import { CreateMessageDto } from './dtos/create-message.dto';
-import { message } from '@message/ioc';
 
 @Controller('messages')
 export class CreateMessageController {
   private readonly logger = new Logger(CreateMessageController.name);
-  constructor (
-    @Inject(message.useCases.createMessage)
-    private readonly createMessageUseCase: ICreateMessageUseCase,
+
+  constructor(
+    @Inject('CREATE_MESSAGE_QUEUE') private readonly client: ClientProxy,
   ) {}
 
   @Post()
-  createMessage(
+  async createMessage(
     @Body() payload: CreateMessageDto,
     @Headers('X-User-Id') user: string,
-  ): any {
-    this.logger.log(`Payload recebido: ${JSON.stringify(payload)}`);
-    this.createMessageUseCase.execute({ ...payload, sender: user });
+  ): Promise<any> {
+    const messageData = { ...payload, sender: user };
+    this.logger.log(`Enviando mensagem para a fila: ${JSON.stringify(messageData)}`);
+
+    this.client.emit('create_message', messageData);
+
     return { message: 'Mensagem recebida' };
   }
 }
