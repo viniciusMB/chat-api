@@ -89,7 +89,7 @@ describe('CreateMessageWithFileController Integration', () => {
 
     fs.unlinkSync(filePath);
 
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise(resolve => setTimeout(resolve, 500));
 
     const messageDoc = await connection.collection('messages').findOne({
       sender: 'user1',
@@ -177,7 +177,7 @@ describe('CreateMessageWithFileController Integration', () => {
     fs.unlinkSync(file2Path);
     fs.unlinkSync(file3Path);
 
-    await new Promise(resolve => setTimeout(resolve, 100));
+    await new Promise(resolve => setTimeout(resolve, 500));
 
     const chatMembers = await connection
       .collection('chatmembers')

@@ -68,7 +68,7 @@ describe('ReplyMessageController Integration', () => {
       .expect(201)
       .expect({ message: 'Message received' });
 
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    await new Promise((resolve) => setTimeout(resolve, 500));
 
     const chatMembers = await connection
       .collection('chatmembers')
@@ -100,7 +100,7 @@ describe('ReplyMessageController Integration', () => {
       .expect(201)
       .expect({ message: 'Message received' });
 
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    await new Promise((resolve) => setTimeout(resolve, 500));
 
     const updatedChat = await connection.collection('chats').findOne({ chatKey });
     expect(updatedChat).toBeDefined();

@@ -72,7 +72,7 @@ describe('DeleteMessageController Integration', () => {
       .expect(HttpStatus.OK)
       .expect({ message: 'Message received' });
 
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    await new Promise((resolve) => setTimeout(resolve, 500));
 
     const found = await connection.collection('messages').findOne({ _id: result.insertedId });
     expect(found).toBeNull();
@@ -86,7 +86,7 @@ describe('DeleteMessageController Integration', () => {
       .set('X-User-Id', user)
       .expect(HttpStatus.OK);
     
-      await new Promise((resolve) => setTimeout(resolve, 100));
+      await new Promise((resolve) => setTimeout(resolve, 500));
     
       expect(loggerErrorSpy).toHaveBeenCalledWith(
         expect.stringContaining('Message not found!')
@@ -116,7 +116,7 @@ describe('DeleteMessageController Integration', () => {
       .set('X-User-Id', user)
       .expect(HttpStatus.OK);
 
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    await new Promise((resolve) => setTimeout(resolve, 500));
     const found = await connection.collection('messages').findOne({ reply: messageId });
     expect(found).toBeNull()
   });

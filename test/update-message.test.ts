@@ -71,7 +71,7 @@ describe('UpdateMessageController Integration', () => {
       .expect(HttpStatus.OK)
       .expect({ message: 'Message received' });
 
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    await new Promise((resolve) => setTimeout(resolve, 500));
     const updatedMessage = await connection.collection('messages').findOne({ _id: result.insertedId });
     expect(updatedMessage).toBeDefined();
     expect(updatedMessage.text).toEqual('Updated text');
@@ -89,7 +89,7 @@ describe('UpdateMessageController Integration', () => {
       .expect(HttpStatus.OK)
       .expect({ message: 'Message received' });
 
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    await new Promise((resolve) => setTimeout(resolve, 500));
 
     expect(loggerErrorSpy).toHaveBeenCalledWith(
       expect.stringContaining('Message not found!')

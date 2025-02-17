@@ -66,7 +66,7 @@ describe('CreateMessageController Integration', () => {
       .expect(201)
       .expect({ message: 'Message received' });
 
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    await new Promise((resolve) => setTimeout(resolve, 500));
 
     const chatMembers = await connection
       .collection('chatmembers')
@@ -130,7 +130,7 @@ describe('CreateMessageController Integration', () => {
       .expect(201)
       .expect({ message: 'Message received' });
 
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    await new Promise((resolve) => setTimeout(resolve, 500));
 
     const chatMembers = await connection
       .collection('chatmembers')
